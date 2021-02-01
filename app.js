@@ -5,9 +5,12 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 
 const authRoutes = require('./routes/authRoutes');
+const gameRoutes = require('./routes/gameRoutes');
+
 const {checkUser, requireAuth} = require('./middlewares/authMiddleware');
 const mongooseConnect = require('./databases/mongooseConnect');
 
+const {GAME_ROUTE_PREFIX} = require('./constants/urls/gameUrls');
 
 const app = express();
 
@@ -27,17 +30,17 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(checkUser);
 
-// check if user signed in
-app.get('*', checkUser);
 
 // home page
 app.get('/', (req, res) => {
     res.render('home');
 })
 
-app.get('/game', (req, res) => {
+app.use(GAME_ROUTE_PREFIX, gameRoutes);
+
+app.get('/game2', (req, res) => {
     res.render('match-page');
-})
+});
 
 // auth routes
 app.use(authRoutes);
