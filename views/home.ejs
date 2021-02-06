@@ -5,8 +5,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col border">
-
+        <div class="col">
             <form action="/create-game" class="text-center m-5">
                 <h1 class="text-uppercase ">create a new game</h1>
                 <p class="m-5">
@@ -18,15 +17,19 @@
                 <button class="btn btn-primary">Create</button>
             </form>
         </div>
-        <div class="col border">
+        <div class="col">
             <form action="/join-game" class="text-center m-5">
                 <h1 class="text-uppercase">Join a game</h1>
-                <p class="m-5">
+                <p class="m-2">
                     <label> Enter game id: </label>
                     <input type="text" required>
                 </p>
-                <br>
-
+                <p class="m-4">
+                    <label> Join as: </label>
+                    <br>
+                    <input type="radio" name="actor" value="player" required> Player
+                    <input type="radio" name="actor" value="spectator" required> Spectator
+                </p>
                 <button class="btn btn-primary">Join</button>
             </form>
         </div>
