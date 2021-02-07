@@ -2,14 +2,16 @@
   "name": "samer_chess_multiplayer",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
+    "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
     "chess.js": "^0.11.0",
     "colyseus": "^0.14.6",
     "cookie-parser": "^1.4.5",
@@ -20,5 +22,8 @@
     "mongoose": "^5.11.14",
     "nodemon": "^2.0.7",
     "validator": "^13.5.2"
+  },
+  "devDependencies": {
+    "@colyseus/schema": "^1.0.11"
   }
 }

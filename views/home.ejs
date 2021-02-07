@@ -6,23 +6,23 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <form action="/create-game" class="text-center m-5">
+            <form action="/create-game" class="text-center m-5" method="post">
                 <h1 class="text-uppercase ">create a new game</h1>
                 <p class="m-5">
                     <label> Choose color to play: </label>
                     <br>
-                    <input type="radio" name="color" value="white" required> White
-                    <input type="radio" name="color" value="black" required> Black
+                    <input type="radio" name="color" value="w" required> White
+                    <input type="radio" name="color" value="b" required> Black
                 </p>
                 <button class="btn btn-primary">Create</button>
             </form>
         </div>
         <div class="col">
-            <form action="/join-game" class="text-center m-5">
+            <form action="/join-game" class="text-center m-5" method="post">
                 <h1 class="text-uppercase">Join a game</h1>
                 <p class="m-2">
                     <label> Enter game id: </label>
-                    <input type="text" required>
+                    <input type="text" name="roomId" required>
                 </p>
                 <p class="m-4">
                     <label> Join as: </label>
