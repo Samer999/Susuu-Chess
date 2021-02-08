@@ -55,7 +55,7 @@
   // Misc Util Functions
   // ---------------------------------------------------------------------------
 
-  function throttle (f, interval, scope) {
+  function throttle(f, interval, scope) {
     var timeout = 0
     var shouldFire = false
     var args = []
@@ -94,18 +94,19 @@
   //   }
   // }
 
-  function uuid () {
-    return 'xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx'.replace(/x/g, function (c) {
-      var r = (Math.random() * 16) | 0
-      return r.toString(16)
-    })
+  function uuid() {
+    return 'xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx'.replace(/x/g,
+        function (c) {
+          var r = (Math.random() * 16) | 0
+          return r.toString(16)
+        })
   }
 
-  function deepCopy (thing) {
+  function deepCopy(thing) {
     return JSON.parse(JSON.stringify(thing))
   }
 
-  function parseSemVer (version) {
+  function parseSemVer(version) {
     var tmp = version.split('.')
     return {
       major: parseInt(tmp[0], 10),
@@ -115,23 +116,25 @@
   }
 
   // returns true if version is >= minimum
-  function validSemanticVersion (version, minimum) {
+  function validSemanticVersion(version, minimum) {
     version = parseSemVer(version)
     minimum = parseSemVer(minimum)
 
     var versionNum = (version.major * 100000 * 100000) +
-                     (version.minor * 100000) +
-                     version.patch
+        (version.minor * 100000) +
+        version.patch
     var minimumNum = (minimum.major * 100000 * 100000) +
-                     (minimum.minor * 100000) +
-                     minimum.patch
+        (minimum.minor * 100000) +
+        minimum.patch
 
     return versionNum >= minimumNum
   }
 
-  function interpolateTemplate (str, obj) {
+  function interpolateTemplate(str, obj) {
     for (var key in obj) {
-      if (!obj.hasOwnProperty(key)) continue
+      if (!obj.hasOwnProperty(key)) {
+        continue
+      }
       var keyTemplateStr = '{' + key + '}'
       var value = obj[key]
       while (str.indexOf(keyTemplateStr) !== -1) {
@@ -154,43 +157,51 @@
   // Predicates
   // ---------------------------------------------------------------------------
 
-  function isString (s) {
+  function isString(s) {
     return typeof s === 'string'
   }
 
-  function isFunction (f) {
+  function isFunction(f) {
     return typeof f === 'function'
   }
 
-  function isInteger (n) {
+  function isInteger(n) {
     return typeof n === 'number' &&
-           isFinite(n) &&
-           Math.floor(n) === n
+        isFinite(n) &&
+        Math.floor(n) === n
   }
 
-  function validAnimationSpeed (speed) {
-    if (speed === 'fast' || speed === 'slow') return true
-    if (!isInteger(speed)) return false
+  function validAnimationSpeed(speed) {
+    if (speed === 'fast' || speed === 'slow') {
+      return true
+    }
+    if (!isInteger(speed)) {
+      return false
+    }
     return speed >= 0
   }
 
-  function validThrottleRate (rate) {
+  function validThrottleRate(rate) {
     return isInteger(rate) &&
-           rate >= 1
+        rate >= 1
   }
 
-  function validMove (move) {
+  function validMove(move) {
     // move should be a string
-    if (!isString(move)) return false
+    if (!isString(move)) {
+      return false
+    }
 
     // move should be in the form of "e2-e4", "f6-d5"
     var squares = move.split('-')
-    if (squares.length !== 2) return false
+    if (squares.length !== 2) {
+      return false
+    }
 
     return validSquare(squares[0]) && validSquare(squares[1])
   }
 
-  function validSquare (square) {
+  function validSquare(square) {
     return isString(square) && square.search(/^[a-h][1-8]$/) !== -1
   }
 
@@ -205,7 +216,7 @@
     console.assert(!validSquare({}))
   }
 
-  function validPieceCode (code) {
+  function validPieceCode(code) {
     return isString(code) && code.search(/^[bw][KQRNBP]$/) !== -1
   }
 
@@ -222,8 +233,10 @@
     console.assert(!validPieceCode({}))
   }
 
-  function validFen (fen) {
-    if (!isString(fen)) return false
+  function validFen(fen) {
+    if (!isString(fen)) {
+      return false
+    }
 
     // cut off any move, castling, etc info from the end
     // we're only interested in position information
@@ -234,7 +247,9 @@
 
     // FEN should be 8 sections separated by slashes
     var chunks = fen.split('/')
-    if (chunks.length !== 8) return false
+    if (chunks.length !== 8) {
+      return false
+    }
 
     // check each section
     for (var i = 0; i < 8; i++) {
@@ -250,9 +265,12 @@
   if (RUN_ASSERTS) {
     console.assert(validFen(START_FEN))
     console.assert(validFen('8/8/8/8/8/8/8/8'))
-    console.assert(validFen('r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R'))
-    console.assert(validFen('3r3r/1p4pp/2nb1k2/pP3p2/8/PB2PN2/p4PPP/R4RK1 b - - 0 1'))
-    console.assert(!validFen('3r3z/1p4pp/2nb1k2/pP3p2/8/PB2PN2/p4PPP/R4RK1 b - - 0 1'))
+    console.assert(
+        validFen('r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R'))
+    console.assert(
+        validFen('3r3r/1p4pp/2nb1k2/pP3p2/8/PB2PN2/p4PPP/R4RK1 b - - 0 1'))
+    console.assert(
+        !validFen('3r3z/1p4pp/2nb1k2/pP3p2/8/PB2PN2/p4PPP/R4RK1 b - - 0 1'))
     console.assert(!validFen('anbqkbnr/8/8/8/8/8/PPPPPPPP/8'))
     console.assert(!validFen('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/'))
     console.assert(!validFen('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBN'))
@@ -261,11 +279,15 @@
     console.assert(!validFen({}))
   }
 
-  function validPositionObject (pos) {
-    if (!$.isPlainObject(pos)) return false
+  function validPositionObject(pos) {
+    if (!$.isPlainObject(pos)) {
+      return false
+    }
 
     for (var i in pos) {
-      if (!pos.hasOwnProperty(i)) continue
+      if (!pos.hasOwnProperty(i)) {
+        continue
+      }
 
       if (!validSquare(i) || !validPieceCode(pos[i])) {
         return false
@@ -287,15 +309,15 @@
     console.assert(!validPositionObject(START_FEN))
   }
 
-  function isTouchDevice () {
+  function isTouchDevice() {
     return 'ontouchstart' in document.documentElement
   }
 
-  function validJQueryVersion () {
+  function validJQueryVersion() {
     return typeof window.$ &&
-           $.fn &&
-           $.fn.jquery &&
-           validSemanticVersion($.fn.jquery, MINIMUM_JQUERY_VERSION)
+        $.fn &&
+        $.fn.jquery &&
+        validSemanticVersion($.fn.jquery, MINIMUM_JQUERY_VERSION)
   }
 
   // ---------------------------------------------------------------------------
@@ -303,7 +325,7 @@
   // ---------------------------------------------------------------------------
 
   // convert FEN piece code to bP, wK, etc
-  function fenToPieceCode (piece) {
+  function fenToPieceCode(piece) {
     // black piece
     if (piece.toLowerCase() === piece) {
       return 'b' + piece.toUpperCase()
@@ -314,7 +336,7 @@
   }
 
   // convert bP, wK, etc code to FEN structure
-  function pieceCodeToFen (piece) {
+  function pieceCodeToFen(piece) {
     var pieceCodeLetters = piece.split('')
 
     // white piece
@@ -328,8 +350,10 @@
 
   // convert FEN string to position object
   // returns false if the FEN string is invalid
-  function fenToObj (fen) {
-    if (!validFen(fen)) return false
+  function fenToObj(fen) {
+    if (!validFen(fen)) {
+      return false
+    }
 
     // cut off any move, castling, etc info from the end
     // we're only interested in position information
@@ -365,8 +389,10 @@
 
   // position object to FEN string
   // returns false if the obj is not a valid position object
-  function objToFen (obj) {
-    if (!validPositionObject(obj)) return false
+  function objToFen(obj) {
+    if (!validPositionObject(obj)) {
+      return false
+    }
 
     var fen = ''
 
@@ -403,28 +429,28 @@
     console.assert(objToFen({a2: 'wP', 'b2': 'bP'}) === '8/8/8/8/8/8/Pp6/8')
   }
 
-  function squeezeFenEmptySquares (fen) {
+  function squeezeFenEmptySquares(fen) {
     return fen.replace(/11111111/g, '8')
-      .replace(/1111111/g, '7')
-      .replace(/111111/g, '6')
-      .replace(/11111/g, '5')
-      .replace(/1111/g, '4')
-      .replace(/111/g, '3')
-      .replace(/11/g, '2')
+    .replace(/1111111/g, '7')
+    .replace(/111111/g, '6')
+    .replace(/11111/g, '5')
+    .replace(/1111/g, '4')
+    .replace(/111/g, '3')
+    .replace(/11/g, '2')
   }
 
-  function expandFenEmptySquares (fen) {
+  function expandFenEmptySquares(fen) {
     return fen.replace(/8/g, '11111111')
-      .replace(/7/g, '1111111')
-      .replace(/6/g, '111111')
-      .replace(/5/g, '11111')
-      .replace(/4/g, '1111')
-      .replace(/3/g, '111')
-      .replace(/2/g, '11')
+    .replace(/7/g, '1111111')
+    .replace(/6/g, '111111')
+    .replace(/5/g, '11111')
+    .replace(/4/g, '1111')
+    .replace(/3/g, '111')
+    .replace(/2/g, '11')
   }
 
   // returns the distance between two squares
-  function squareDistance (squareA, squareB) {
+  function squareDistance(squareA, squareB) {
     var squareAArray = squareA.split('')
     var squareAx = COLUMNS.indexOf(squareAArray[0]) + 1
     var squareAy = parseInt(squareAArray[1], 10)
@@ -436,13 +462,15 @@
     var xDelta = Math.abs(squareAx - squareBx)
     var yDelta = Math.abs(squareAy - squareBy)
 
-    if (xDelta >= yDelta) return xDelta
+    if (xDelta >= yDelta) {
+      return xDelta
+    }
     return yDelta
   }
 
   // returns the square of the closest instance of piece
   // returns false if no instance of piece is found in position
-  function findClosestPiece (position, piece, square) {
+  function findClosestPiece(position, piece, square) {
     // create array of closest squares from square
     var closestSquares = createRadius(square)
 
@@ -459,7 +487,7 @@
   }
 
   // returns an array of closest squares from square
-  function createRadius (square) {
+  function createRadius(square) {
     var squares = []
 
     // calculate distance of all squares
@@ -468,7 +496,9 @@
         var s = COLUMNS[i] + (j + 1)
 
         // skip the square we're starting from
-        if (square === s) continue
+        if (square === s) {
+          continue
+        }
 
         squares.push({
           square: s,
@@ -493,14 +523,18 @@
 
   // given a position and a set of moves, return a new position
   // with the moves executed
-  function calculatePositionFromMoves (position, moves) {
+  function calculatePositionFromMoves(position, moves) {
     var newPosition = deepCopy(position)
 
     for (var i in moves) {
-      if (!moves.hasOwnProperty(i)) continue
+      if (!moves.hasOwnProperty(i)) {
+        continue
+      }
 
       // skip the move if the position doesn't have a piece on the source square
-      if (!newPosition.hasOwnProperty(i)) continue
+      if (!newPosition.hasOwnProperty(i)) {
+        continue
+      }
 
       var piece = newPosition[i]
       delete newPosition[i]
@@ -516,7 +550,7 @@
   // HTML
   // ---------------------------------------------------------------------------
 
-  function buildContainerHTML (hasSparePieces) {
+  function buildContainerHTML(hasSparePieces) {
     var html = '<div class="{chessboard}">'
 
     if (hasSparePieces) {
@@ -538,7 +572,7 @@
   // Config
   // ---------------------------------------------------------------------------
 
-  function expandConfigArgumentShorthand (config) {
+  function expandConfigArgumentShorthand(config) {
     if (config === 'start') {
       config = {position: deepCopy(START_POSITION)}
     } else if (validFen(config)) {
@@ -548,30 +582,44 @@
     }
 
     // config must be an object
-    if (!$.isPlainObject(config)) config = {}
+    if (!$.isPlainObject(config)) {
+      config = {}
+    }
 
     return config
   }
 
   // validate config / set default options
-  function expandConfig (config) {
+  function expandConfig(config) {
     // default for orientation is white
-    if (config.orientation !== 'black') config.orientation = 'white'
+    if (config.orientation !== 'black') {
+      config.orientation = 'white'
+    }
 
     // default for showNotation is true
-    if (config.showNotation !== false) config.showNotation = true
+    if (config.showNotation !== false) {
+      config.showNotation = true
+    }
 
     // default for draggable is false
-    if (config.draggable !== true) config.draggable = false
+    if (config.draggable !== true) {
+      config.draggable = false
+    }
 
     // default for dropOffBoard is 'snapback'
-    if (config.dropOffBoard !== 'trash') config.dropOffBoard = 'snapback'
+    if (config.dropOffBoard !== 'trash') {
+      config.dropOffBoard = 'snapback'
+    }
 
     // default for sparePieces is false
-    if (config.sparePieces !== true) config.sparePieces = false
+    if (config.sparePieces !== true) {
+      config.sparePieces = false
+    }
 
     // draggable must be true if sparePieces is enabled
-    if (config.sparePieces) config.draggable = true
+    if (config.sparePieces) {
+      config.draggable = true
+    }
 
     // default piece theme is wikipedia
     if (!config.hasOwnProperty('pieceTheme') ||
@@ -580,14 +628,32 @@
     }
 
     // animation speeds
-    if (!validAnimationSpeed(config.appearSpeed)) config.appearSpeed = DEFAULT_APPEAR_SPEED
-    if (!validAnimationSpeed(config.moveSpeed)) config.moveSpeed = DEFAULT_MOVE_SPEED
-    if (!validAnimationSpeed(config.snapbackSpeed)) config.snapbackSpeed = DEFAULT_SNAPBACK_SPEED
-    if (!validAnimationSpeed(config.snapSpeed)) config.snapSpeed = DEFAULT_SNAP_SPEED
-    if (!validAnimationSpeed(config.trashSpeed)) config.trashSpeed = DEFAULT_TRASH_SPEED
+    if (!validAnimationSpeed(
+        config.appearSpeed)) {
+      config.appearSpeed = DEFAULT_APPEAR_SPEED
+    }
+    if (!validAnimationSpeed(
+        config.moveSpeed)) {
+      config.moveSpeed = DEFAULT_MOVE_SPEED
+    }
+    if (!validAnimationSpeed(
+        config.snapbackSpeed)) {
+      config.snapbackSpeed = DEFAULT_SNAPBACK_SPEED
+    }
+    if (!validAnimationSpeed(
+        config.snapSpeed)) {
+      config.snapSpeed = DEFAULT_SNAP_SPEED
+    }
+    if (!validAnimationSpeed(
+        config.trashSpeed)) {
+      config.trashSpeed = DEFAULT_TRASH_SPEED
+    }
 
     // throttle rate
-    if (!validThrottleRate(config.dragThrottleRate)) config.dragThrottleRate = DEFAULT_DRAG_THROTTLE_RATE
+    if (!validThrottleRate(
+        config.dragThrottleRate)) {
+      config.dragThrottleRate = DEFAULT_DRAG_THROTTLE_RATE
+    }
 
     return config
   }
@@ -597,12 +663,14 @@
   // ---------------------------------------------------------------------------
 
   // check for a compatible version of jQuery
-  function checkJQuery () {
+  function checkJQuery() {
     if (!validJQueryVersion()) {
-      var errorMsg = 'Chessboard Error 1005: Unable to find a valid version of jQuery. ' +
-        'Please include jQuery ' + MINIMUM_JQUERY_VERSION + ' or higher on the page' +
-        '\n\n' +
-        'Exiting' + ELLIPSIS
+      var errorMsg = 'Chessboard Error 1005: Unable to find a valid version of jQuery. '
+          +
+          'Please include jQuery ' + MINIMUM_JQUERY_VERSION
+          + ' or higher on the page' +
+          '\n\n' +
+          'Exiting' + ELLIPSIS
       window.alert(errorMsg)
       return false
     }
@@ -611,12 +679,12 @@
   }
 
   // return either boolean false or the $container element
-  function checkContainerArg (containerElOrString) {
+  function checkContainerArg(containerElOrString) {
     if (containerElOrString === '') {
       var errorMsg1 = 'Chessboard Error 1001: ' +
-        'The first argument to Chessboard() cannot be an empty string.' +
-        '\n\n' +
-        'Exiting' + ELLIPSIS
+          'The first argument to Chessboard() cannot be an empty string.' +
+          '\n\n' +
+          'Exiting' + ELLIPSIS
       window.alert(errorMsg1)
       return false
     }
@@ -631,10 +699,10 @@
     var $container = $(containerElOrString)
     if ($container.length !== 1) {
       var errorMsg2 = 'Chessboard Error 1003: ' +
-        'The first argument to Chessboard() must be the ID of a DOM node, ' +
-        'an ID query selector, or a single DOM node.' +
-        '\n\n' +
-        'Exiting' + ELLIPSIS
+          'The first argument to Chessboard() must be the ID of a DOM node, ' +
+          'an ID query selector, or a single DOM node.' +
+          '\n\n' +
+          'Exiting' + ELLIPSIS
       window.alert(errorMsg2)
       return false
     }
@@ -646,11 +714,15 @@
   // Constructor
   // ---------------------------------------------------------------------------
 
-  function constructor (containerElOrString, config) {
+  function constructor(containerElOrString, config) {
     // first things first: check basic dependencies
-    if (!checkJQuery()) return null
+    if (!checkJQuery()) {
+      return null
+    }
     var $container = checkContainerArg(containerElOrString)
-    if (!$container) return null
+    if (!$container) {
+      return null
+    }
 
     // ensure the config object is what we expect
     config = expandConfigArgumentShorthand(config)
@@ -685,10 +757,10 @@
     // Validation / Errors
     // -------------------------------------------------------------------------
 
-    function error (code, msg, obj) {
+    function error(code, msg, obj) {
       // do nothing if showErrors is not set
       if (
-        config.hasOwnProperty('showErrors') !== true ||
+          config.hasOwnProperty('showErrors') !== true ||
           config.showErrors === false
       ) {
         return
@@ -698,7 +770,7 @@
 
       // print to console
       if (
-        config.showErrors === 'console' &&
+          config.showErrors === 'console' &&
           typeof console === 'object' &&
           typeof console.log === 'function'
       ) {
@@ -724,7 +796,7 @@
       }
     }
 
-    function setInitialState () {
+    function setInitialState() {
       currentOrientation = config.orientation
 
       // make sure position is valid
@@ -737,9 +809,9 @@
           currentPosition = deepCopy(config.position)
         } else {
           error(
-            7263,
-            'Invalid value passed to config.position.',
-            config.position
+              7263,
+              'Invalid value passed to config.position.',
+              config.position
           )
         }
       }
@@ -754,7 +826,7 @@
     // get the width of the container element (could be anything), reduce by 1 for
     // fudge factor, and then keep reducing until we find an exact mod 8 for
     // our square size
-    function calculateSquareSize () {
+    function calculateSquareSize() {
       var containerWidth = parseInt($container.width(), 10)
 
       // defensive, prevent infinite loop
@@ -773,7 +845,7 @@
     }
 
     // create random IDs for elements
-    function createElIds () {
+    function createElIds() {
       // squares on the board
       for (var i = 0; i < COLUMNS.length; i++) {
         for (var j = 1; j <= 8; j++) {
@@ -796,7 +868,7 @@
     // Markup Building
     // -------------------------------------------------------------------------
 
-    function buildBoardHTML (orientation) {
+    function buildBoardHTML(orientation) {
       if (orientation !== 'black') {
         orientation = 'white'
       }
@@ -818,10 +890,11 @@
           var square = alpha[j] + row
 
           html += '<div class="{square} ' + CSS[squareColor] + ' ' +
-            'square-' + square + '" ' +
-            'style="width:' + squareSize + 'px;height:' + squareSize + 'px;" ' +
-            'id="' + squareElsIds[square] + '" ' +
-            'data-square="' + square + '">'
+              'square-' + square + '" ' +
+              'style="width:' + squareSize + 'px;height:' + squareSize + 'px;" '
+              +
+              'id="' + squareElsIds[square] + '" ' +
+              'data-square="' + square + '">'
 
           if (config.showNotation) {
             // alpha notation
@@ -854,7 +927,7 @@
       return interpolateTemplate(html, CSS)
     }
 
-    function buildPieceImgSrc (piece) {
+    function buildPieceImgSrc(piece) {
       if (isFunction(config.pieceTheme)) {
         return config.pieceTheme(piece)
       }
@@ -868,15 +941,15 @@
       return ''
     }
 
-    function buildPieceHTML (piece, hidden, id) {
+    function buildPieceHTML(piece, hidden, id) {
       var html = '<img src="' + buildPieceImgSrc(piece) + '" '
       if (isString(id) && id !== '') {
         html += 'id="' + id + '" '
       }
       html += 'alt="" ' +
-        'class="{piece}" ' +
-        'data-piece="' + piece + '" ' +
-        'style="width:' + squareSize + 'px;' + 'height:' + squareSize + 'px;'
+          'class="{piece}" ' +
+          'data-piece="' + piece + '" ' +
+          'style="width:' + squareSize + 'px;' + 'height:' + squareSize + 'px;'
 
       if (hidden) {
         html += 'display:none;'
@@ -887,7 +960,7 @@
       return interpolateTemplate(html, CSS)
     }
 
-    function buildSparePiecesHTML (color) {
+    function buildSparePiecesHTML(color) {
       var pieces = ['wK', 'wQ', 'wR', 'wB', 'wN', 'wP']
       if (color === 'black') {
         pieces = ['bK', 'bQ', 'bR', 'bB', 'bN', 'bP']
@@ -905,7 +978,7 @@
     // Animations
     // -------------------------------------------------------------------------
 
-    function animateSquareToSquare (src, dest, piece, completeFn) {
+    function animateSquareToSquare(src, dest, piece, completeFn) {
       // get information about the source and destination squares
       var $srcSquare = $('#' + squareElsIds[src])
       var srcSquarePosition = $srcSquare.offset()
@@ -927,7 +1000,7 @@
       // remove original piece from source square
       $srcSquare.find('.' + CSS.piece).remove()
 
-      function onFinishAnimation1 () {
+      function onFinishAnimation1() {
         // add the "real" piece to the destination square
         $destSquare.append(buildPieceHTML(piece))
 
@@ -948,7 +1021,7 @@
       $animatedPiece.animate(destSquarePosition, opts)
     }
 
-    function animateSparePieceToSquare (piece, dest, completeFn) {
+    function animateSparePieceToSquare(piece, dest, completeFn) {
       var srcOffset = $('#' + sparePiecesElsIds[piece]).offset()
       var $destSquare = $('#' + squareElsIds[dest])
       var destOffset = $destSquare.offset()
@@ -965,7 +1038,7 @@
       })
 
       // on complete
-      function onFinishAnimation2 () {
+      function onFinishAnimation2() {
         // add the "real" piece to the destination square
         $destSquare.find('.' + CSS.piece).remove()
         $destSquare.append(buildPieceHTML(piece))
@@ -988,14 +1061,19 @@
     }
 
     // execute an array of animations
-    function doAnimations (animations, oldPos, newPos) {
-      if (animations.length === 0) return
+    function doAnimations(animations, oldPos, newPos) {
+      if (animations.length === 0) {
+        return
+      }
 
       var numFinished = 0
-      function onFinishAnimation3 () {
+
+      function onFinishAnimation3() {
         // exit if all the animations aren't finished
         numFinished = numFinished + 1
-        if (numFinished !== animations.length) return
+        if (numFinished !== animations.length) {
+          return
+        }
 
         drawPositionInstant()
 
@@ -1011,29 +1089,31 @@
         // clear a piece
         if (animation.type === 'clear') {
           $('#' + squareElsIds[animation.square] + ' .' + CSS.piece)
-            .fadeOut(config.trashSpeed, onFinishAnimation3)
+          .fadeOut(config.trashSpeed, onFinishAnimation3)
 
-        // add a piece with no spare pieces - fade the piece onto the square
+          // add a piece with no spare pieces - fade the piece onto the square
         } else if (animation.type === 'add' && !config.sparePieces) {
           $('#' + squareElsIds[animation.square])
-            .append(buildPieceHTML(animation.piece, true))
-            .find('.' + CSS.piece)
-            .fadeIn(config.appearSpeed, onFinishAnimation3)
+          .append(buildPieceHTML(animation.piece, true))
+          .find('.' + CSS.piece)
+          .fadeIn(config.appearSpeed, onFinishAnimation3)
 
-        // add a piece with spare pieces - animate from the spares
+          // add a piece with spare pieces - animate from the spares
         } else if (animation.type === 'add' && config.sparePieces) {
-          animateSparePieceToSquare(animation.piece, animation.square, onFinishAnimation3)
+          animateSparePieceToSquare(animation.piece, animation.square,
+              onFinishAnimation3)
 
-        // move a piece from squareA to squareB
+          // move a piece from squareA to squareB
         } else if (animation.type === 'move') {
-          animateSquareToSquare(animation.source, animation.destination, animation.piece, onFinishAnimation3)
+          animateSquareToSquare(animation.source, animation.destination,
+              animation.piece, onFinishAnimation3)
         }
       }
     }
 
     // calculate an array of animations that need to happen in order to get
     // from pos1 to pos2
-    function calculateAnimations (pos1, pos2) {
+    function calculateAnimations(pos1, pos2) {
       // make copies of both
       pos1 = deepCopy(pos1)
       pos2 = deepCopy(pos2)
@@ -1043,7 +1123,9 @@
 
       // remove pieces that are the same in both positions
       for (var i in pos2) {
-        if (!pos2.hasOwnProperty(i)) continue
+        if (!pos2.hasOwnProperty(i)) {
+          continue
+        }
 
         if (pos1.hasOwnProperty(i) && pos1[i] === pos2[i]) {
           delete pos1[i]
@@ -1053,7 +1135,9 @@
 
       // find all the "move" animations
       for (i in pos2) {
-        if (!pos2.hasOwnProperty(i)) continue
+        if (!pos2.hasOwnProperty(i)) {
+          continue
+        }
 
         var closestPiece = findClosestPiece(pos1, pos2[i], i)
         if (closestPiece) {
@@ -1072,7 +1156,9 @@
 
       // "add" animations
       for (i in pos2) {
-        if (!pos2.hasOwnProperty(i)) continue
+        if (!pos2.hasOwnProperty(i)) {
+          continue
+        }
 
         animations.push({
           type: 'add',
@@ -1085,11 +1171,15 @@
 
       // "clear" animations
       for (i in pos1) {
-        if (!pos1.hasOwnProperty(i)) continue
+        if (!pos1.hasOwnProperty(i)) {
+          continue
+        }
 
         // do not clear a piece if it is on a square that is the result
         // of a "move", ie: a piece capture
-        if (squaresMovedTo.hasOwnProperty(i)) continue
+        if (squaresMovedTo.hasOwnProperty(i)) {
+          continue
+        }
 
         animations.push({
           type: 'clear',
@@ -1107,20 +1197,23 @@
     // Control Flow
     // -------------------------------------------------------------------------
 
-    function drawPositionInstant () {
+    function drawPositionInstant() {
       // clear the board
       $board.find('.' + CSS.piece).remove()
 
       // add the pieces
       for (var i in currentPosition) {
-        if (!currentPosition.hasOwnProperty(i)) continue
+        if (!currentPosition.hasOwnProperty(i)) {
+          continue
+        }
 
         $('#' + squareElsIds[i]).append(buildPieceHTML(currentPosition[i]))
       }
     }
 
-    function drawBoard () {
-      $board.html(buildBoardHTML(currentOrientation, squareSize, config.showNotation))
+    function drawBoard() {
+      $board.html(
+          buildBoardHTML(currentOrientation, squareSize, config.showNotation))
       drawPositionInstant()
 
       if (config.sparePieces) {
@@ -1134,14 +1227,16 @@
       }
     }
 
-    function setCurrentPosition (position) {
+    function setCurrentPosition(position) {
       var oldPos = deepCopy(currentPosition)
       var newPos = deepCopy(position)
       var oldFen = objToFen(oldPos)
       var newFen = objToFen(newPos)
 
       // do nothing if no change in position
-      if (oldFen === newFen) return
+      if (oldFen === newFen) {
+        return
+      }
 
       // run their onChange function
       if (isFunction(config.onChange)) {
@@ -1152,9 +1247,11 @@
       currentPosition = position
     }
 
-    function isXYOnSquare (x, y) {
+    function isXYOnSquare(x, y) {
       for (var i in squareElsOffsets) {
-        if (!squareElsOffsets.hasOwnProperty(i)) continue
+        if (!squareElsOffsets.hasOwnProperty(i)) {
+          continue
+        }
 
         var s = squareElsOffsets[i]
         if (x >= s.left &&
@@ -1169,23 +1266,25 @@
     }
 
     // records the XY coords of every square into memory
-    function captureSquareOffsets () {
+    function captureSquareOffsets() {
       squareElsOffsets = {}
 
       for (var i in squareElsIds) {
-        if (!squareElsIds.hasOwnProperty(i)) continue
+        if (!squareElsIds.hasOwnProperty(i)) {
+          continue
+        }
 
         squareElsOffsets[i] = $('#' + squareElsIds[i]).offset()
       }
     }
 
-    function removeSquareHighlights () {
+    function removeSquareHighlights() {
       $board
-        .find('.' + CSS.square)
-        .removeClass(CSS.highlight1 + ' ' + CSS.highlight2)
+      .find('.' + CSS.square)
+      .removeClass(CSS.highlight1 + ' ' + CSS.highlight2)
     }
 
-    function snapbackDraggedPiece () {
+    function snapbackDraggedPiece() {
       // there is no "snapback" for spare pieces
       if (draggedPieceSource === 'spare') {
         trashDraggedPiece()
@@ -1195,23 +1294,24 @@
       removeSquareHighlights()
 
       // animation complete
-      function complete () {
+      function complete() {
         drawPositionInstant()
         $draggedPiece.css('display', 'none')
 
         // run their onSnapbackEnd function
         if (isFunction(config.onSnapbackEnd)) {
           config.onSnapbackEnd(
-            draggedPiece,
-            draggedPieceSource,
-            deepCopy(currentPosition),
-            currentOrientation
+              draggedPiece,
+              draggedPieceSource,
+              deepCopy(currentPosition),
+              currentOrientation
           )
         }
       }
 
       // get source square position
-      var sourceSquarePosition = $('#' + squareElsIds[draggedPieceSource]).offset()
+      var sourceSquarePosition = $(
+          '#' + squareElsIds[draggedPieceSource]).offset()
 
       // animate the piece to the target square
       var opts = {
@@ -1224,7 +1324,7 @@
       isDragging = false
     }
 
-    function trashDraggedPiece () {
+    function trashDraggedPiece() {
       removeSquareHighlights()
 
       // remove the source piece
@@ -1242,7 +1342,7 @@
       isDragging = false
     }
 
-    function dropDraggedPieceOnSquare (square) {
+    function dropDraggedPieceOnSquare(square) {
       removeSquareHighlights()
 
       // update position
@@ -1255,7 +1355,7 @@
       var targetSquarePosition = $('#' + squareElsIds[square]).offset()
 
       // animation complete
-      function onAnimationComplete () {
+      function onAnimationComplete() {
         drawPositionInstant()
         $draggedPiece.css('display', 'none')
 
@@ -1276,11 +1376,12 @@
       isDragging = false
     }
 
-    function beginDraggingPiece (source, piece, x, y) {
+    function beginDraggingPiece(source, piece, x, y) {
       // run their custom onDragStart function
       // their custom onDragStart function can cancel drag start
       if (isFunction(config.onDragStart) &&
-          config.onDragStart(source, piece, deepCopy(currentPosition), currentOrientation) === false) {
+          config.onDragStart(source, piece, deepCopy(currentPosition),
+              currentOrientation) === false) {
         return
       }
 
@@ -1310,13 +1411,13 @@
       if (source !== 'spare') {
         // highlight the source square and hide the piece
         $('#' + squareElsIds[source])
-          .addClass(CSS.highlight1)
-          .find('.' + CSS.piece)
-          .css('display', 'none')
+        .addClass(CSS.highlight1)
+        .find('.' + CSS.piece)
+        .css('display', 'none')
       }
     }
 
-    function updateDraggedPiece (x, y) {
+    function updateDraggedPiece(x, y) {
       // put the dragged piece over the mouse cursor
       $draggedPiece.css({
         left: x - squareSize / 2,
@@ -1327,7 +1428,9 @@
       var location = isXYOnSquare(x, y)
 
       // do nothing if the location has not changed
-      if (location === draggedPieceLocation) return
+      if (location === draggedPieceLocation) {
+        return
+      }
 
       // remove highlight from previous square
       if (validSquare(draggedPieceLocation)) {
@@ -1342,12 +1445,12 @@
       // run onDragMove
       if (isFunction(config.onDragMove)) {
         config.onDragMove(
-          location,
-          draggedPieceLocation,
-          draggedPieceSource,
-          draggedPiece,
-          deepCopy(currentPosition),
-          currentOrientation
+            location,
+            draggedPieceLocation,
+            draggedPieceSource,
+            draggedPiece,
+            deepCopy(currentPosition),
+            currentOrientation
         )
       }
 
@@ -1355,7 +1458,7 @@
       draggedPieceLocation = location
     }
 
-    function stopDraggedPiece (location) {
+    function stopDraggedPiece(location) {
       // determine what the action should be
       var action = 'drop'
       if (location === 'offboard' && config.dropOffBoard === 'snapback') {
@@ -1395,12 +1498,12 @@
         var oldPosition = deepCopy(currentPosition)
 
         var result = config.onDrop(
-          draggedPieceSource,
-          location,
-          draggedPiece,
-          newPosition,
-          oldPosition,
-          currentOrientation
+            draggedPieceSource,
+            location,
+            draggedPiece,
+            newPosition,
+            oldPosition,
+            currentOrientation
         )
         if (result === 'snapback' || result === 'trash') {
           action = result
@@ -1451,7 +1554,9 @@
     widget.move = function () {
       // no need to throw an error here; just do nothing
       // TODO: this should return the current position
-      if (arguments.length === 0) return
+      if (arguments.length === 0) {
+        return
+      }
 
       var useAnimation = true
 
@@ -1535,7 +1640,9 @@
       }
 
       // default for useAnimations is true
-      if (useAnimation !== false) useAnimation = true
+      if (useAnimation !== false) {
+        useAnimation = true
+      }
 
       if (useAnimation) {
         // start the animations
@@ -1567,8 +1674,8 @@
       // spare pieces
       if (config.sparePieces) {
         $container
-          .find('.' + CSS.sparePieces)
-          .css('paddingLeft', squareSize + boardBorderSize + 'px')
+        .find('.' + CSS.sparePieces)
+        .css('paddingLeft', squareSize + boardBorderSize + 'px')
       }
 
       // redraw the board
@@ -1584,88 +1691,110 @@
     // Browser Events
     // -------------------------------------------------------------------------
 
-    function stopDefault (evt) {
+    function stopDefault(evt) {
       evt.preventDefault()
     }
 
-    function mousedownSquare (evt) {
+    function mousedownSquare(evt) {
       // do nothing if we're not draggable
-      if (!config.draggable) return
+      if (!config.draggable) {
+        return
+      }
 
       // do nothing if there is no piece on this square
       var square = $(this).attr('data-square')
-      if (!validSquare(square)) return
-      if (!currentPosition.hasOwnProperty(square)) return
+      if (!validSquare(square)) {
+        return
+      }
+      if (!currentPosition.hasOwnProperty(square)) {
+        return
+      }
 
       beginDraggingPiece(square, currentPosition[square], evt.pageX, evt.pageY)
     }
 
-    function touchstartSquare (e) {
+    function touchstartSquare(e) {
       // do nothing if we're not draggable
-      if (!config.draggable) return
+      if (!config.draggable) {
+        return
+      }
 
       // do nothing if there is no piece on this square
       var square = $(this).attr('data-square')
-      if (!validSquare(square)) return
-      if (!currentPosition.hasOwnProperty(square)) return
+      if (!validSquare(square)) {
+        return
+      }
+      if (!currentPosition.hasOwnProperty(square)) {
+        return
+      }
 
       e = e.originalEvent
       beginDraggingPiece(
-        square,
-        currentPosition[square],
-        e.changedTouches[0].pageX,
-        e.changedTouches[0].pageY
+          square,
+          currentPosition[square],
+          e.changedTouches[0].pageX,
+          e.changedTouches[0].pageY
       )
     }
 
-    function mousedownSparePiece (evt) {
+    function mousedownSparePiece(evt) {
       // do nothing if sparePieces is not enabled
-      if (!config.sparePieces) return
+      if (!config.sparePieces) {
+        return
+      }
 
       var piece = $(this).attr('data-piece')
 
       beginDraggingPiece('spare', piece, evt.pageX, evt.pageY)
     }
 
-    function touchstartSparePiece (e) {
+    function touchstartSparePiece(e) {
       // do nothing if sparePieces is not enabled
-      if (!config.sparePieces) return
+      if (!config.sparePieces) {
+        return
+      }
 
       var piece = $(this).attr('data-piece')
 
       e = e.originalEvent
       beginDraggingPiece(
-        'spare',
-        piece,
-        e.changedTouches[0].pageX,
-        e.changedTouches[0].pageY
+          'spare',
+          piece,
+          e.changedTouches[0].pageX,
+          e.changedTouches[0].pageY
       )
     }
 
-    function mousemoveWindow (evt) {
+    function mousemoveWindow(evt) {
       if (isDragging) {
         updateDraggedPiece(evt.pageX, evt.pageY)
       }
     }
 
-    var throttledMousemoveWindow = throttle(mousemoveWindow, config.dragThrottleRate)
+    var throttledMousemoveWindow = throttle(mousemoveWindow,
+        config.dragThrottleRate)
 
-    function touchmoveWindow (evt) {
+    function touchmoveWindow(evt) {
       // do nothing if we are not dragging a piece
-      if (!isDragging) return
+      if (!isDragging) {
+        return
+      }
 
       // prevent screen from scrolling
       evt.preventDefault()
 
       updateDraggedPiece(evt.originalEvent.changedTouches[0].pageX,
-        evt.originalEvent.changedTouches[0].pageY)
+          evt.originalEvent.changedTouches[0].pageY)
     }
 
-    var throttledTouchmoveWindow = throttle(touchmoveWindow, config.dragThrottleRate)
+    var throttledTouchmoveWindow = throttle(touchmoveWindow,
+        config.dragThrottleRate)
 
-    function mouseupWindow (evt) {
+    function mouseupWindow(evt) {
       // do nothing if we are not dragging a piece
-      if (!isDragging) return
+      if (!isDragging) {
+        return
+      }
 
       // get the location
       var location = isXYOnSquare(evt.pageX, evt.pageY)
@@ -1673,30 +1802,38 @@
       stopDraggedPiece(location)
     }
 
-    function touchendWindow (evt) {
+    function touchendWindow(evt) {
       // do nothing if we are not dragging a piece
-      if (!isDragging) return
+      if (!isDragging) {
+        return
+      }
 
       // get the location
       var location = isXYOnSquare(evt.originalEvent.changedTouches[0].pageX,
-        evt.originalEvent.changedTouches[0].pageY)
+          evt.originalEvent.changedTouches[0].pageY)
 
       stopDraggedPiece(location)
     }
 
-    function mouseenterSquare (evt) {
+    function mouseenterSquare(evt) {
       // do not fire this event if we are dragging a piece
       // NOTE: this should never happen, but it's a safeguard
-      if (isDragging) return
+      if (isDragging) {
+        return
+      }
 
       // exit if they did not provide a onMouseoverSquare function
-      if (!isFunction(config.onMouseoverSquare)) return
+      if (!isFunction(config.onMouseoverSquare)) {
+        return
+      }
 
       // get the square
       var square = $(evt.currentTarget).attr('data-square')
 
       // NOTE: this should never happen; defensive
-      if (!validSquare(square)) return
+      if (!validSquare(square)) {
+        return
+      }
 
       // get the piece on this square
       var piece = false
@@ -1705,22 +1842,29 @@
       }
 
       // execute their function
-      config.onMouseoverSquare(square, piece, deepCopy(currentPosition), currentOrientation)
+      config.onMouseoverSquare(square, piece, deepCopy(currentPosition),
+          currentOrientation)
     }
 
-    function mouseleaveSquare (evt) {
+    function mouseleaveSquare(evt) {
       // do not fire this event if we are dragging a piece
       // NOTE: this should never happen, but it's a safeguard
-      if (isDragging) return
+      if (isDragging) {
+        return
+      }
 
       // exit if they did not provide an onMouseoutSquare function
-      if (!isFunction(config.onMouseoutSquare)) return
+      if (!isFunction(config.onMouseoutSquare)) {
+        return
+      }
 
       // get the square
       var square = $(evt.currentTarget).attr('data-square')
 
       // NOTE: this should never happen; defensive
-      if (!validSquare(square)) return
+      if (!validSquare(square)) {
+        return
+      }
 
       // get the piece on this square
       var piece = false
@@ -1729,43 +1873,46 @@
       }
 
       // execute their function
-      config.onMouseoutSquare(square, piece, deepCopy(currentPosition), currentOrientation)
+      config.onMouseoutSquare(square, piece, deepCopy(currentPosition),
+          currentOrientation)
     }
 
     // -------------------------------------------------------------------------
     // Initialization
     // -------------------------------------------------------------------------
 
-    function addEvents () {
+    function addEvents() {
       // prevent "image drag"
       $('body').on('mousedown mousemove', '.' + CSS.piece, stopDefault)
 
       // mouse drag pieces
       $board.on('mousedown', '.' + CSS.square, mousedownSquare)
-      $container.on('mousedown', '.' + CSS.sparePieces + ' .' + CSS.piece, mousedownSparePiece)
+      $container.on('mousedown', '.' + CSS.sparePieces + ' .' + CSS.piece,
+          mousedownSparePiece)
 
       // mouse enter / leave square
       $board
-        .on('mouseenter', '.' + CSS.square, mouseenterSquare)
-        .on('mouseleave', '.' + CSS.square, mouseleaveSquare)
+      .on('mouseenter', '.' + CSS.square, mouseenterSquare)
+      .on('mouseleave', '.' + CSS.square, mouseleaveSquare)
 
       // piece drag
       var $window = $(window)
       $window
-        .on('mousemove', throttledMousemoveWindow)
-        .on('mouseup', mouseupWindow)
+      .on('mousemove', throttledMousemoveWindow)
+      .on('mouseup', mouseupWindow)
 
       // touch drag pieces
       if (isTouchDevice()) {
         $board.on('touchstart', '.' + CSS.square, touchstartSquare)
-        $container.on('touchstart', '.' + CSS.sparePieces + ' .' + CSS.piece, touchstartSparePiece)
+        $container.on('touchstart', '.' + CSS.sparePieces + ' .' + CSS.piece,
+            touchstartSparePiece)
         $window
-          .on('touchmove', throttledTouchmoveWindow)
-          .on('touchend', touchendWindow)
+        .on('touchmove', throttledTouchmoveWindow)
+        .on('touchend', touchendWindow)
       }
     }
 
-    function initDOM () {
+    function initDOM() {
       // create unique IDs for all the elements we will create
       createElIds()
 
