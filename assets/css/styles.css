@@ -8,6 +8,32 @@ body {
   font-family: 'Quicksand', sans-serif;
 }
 
+.roomIdHolder {
+  position: absolute;
+  top: 0px;
+  right: 350px;
+}
+
+#gameId {
+  font-weight: bold;
+}
+.gameHolder {
+  position: relative;
+}
+
+.gameBody {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 65px;
+}
+
+.gameHeader {
+  position: absolute;
+  top: -50;
+  left: 40%;
+}
+
 footer {
   text-align: center;
   margin-top: 120px;

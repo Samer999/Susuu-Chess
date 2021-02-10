@@ -7,6 +7,13 @@ function gamePage(color, roomId, isSpectator) {
   let $pgn = $('#pgn');
   let myRoom = null;
 
+
+  if(isSpectator === true) {
+    setRole('S');
+  } else {
+    setRole(myColor);
+  }
+
   function setUpBoard() {
     let config = {
       draggable: true,
@@ -34,15 +41,16 @@ function gamePage(color, roomId, isSpectator) {
         board.position(state.fen);
       });
       myRoom = room;
+      setRoomId(room.id);
     });
   } else {
     client.create("chessGame", {color}).then(room => {
-      console.log(room.id);
       room.onStateChange((state) => {
         game.load(state.fen);
         board.position(state.fen);
       });
       myRoom = room;
+      setRoomId(room.id);
     });
   }
 
@@ -125,5 +133,29 @@ function gamePage(color, roomId, isSpectator) {
     $pgn.html(game.pgn())
   }
 
+  function setRole(role) {
+    let status = ""; ;
+    switch(role) {
+      case 'w':
+        status = 'You are Playing As White';
+        break;
+
+      case 'b':
+        status = 'You are Playing As Black';
+        break;
+      case 'S':
+        status = 'You are Spectating this match';
+        break;
+      default:
+        status = 'Thanks for being there';
+    }
+
+    document.querySelector('#joinerStatus').innerText = status;
+  }
+
+  function setRoomId(roomId) {
+    document.querySelector('#gameId').innerText = roomId;
+  }
   setUpBoard();
 }
+
