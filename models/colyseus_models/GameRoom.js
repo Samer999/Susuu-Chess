@@ -32,6 +32,9 @@ class GameRoom extends colyseus.Room {
 
   // Authorize client based on provided options before WebSocket handshake is complete
   onAuth(client, options, request) {
+    if (options.isSpectator) {
+      return true;
+    }
     const color = options.color;
     if (color === "b") {
       if (this.state.blackPlayer != null) {

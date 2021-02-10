@@ -1,21 +1,35 @@
-function createGame(color, roomId) {
-  var myColor = color;
-  var board = null;
-  var game = new Chess();
-  var $status = $('#status');
-  var $fen = $('#fen');
-  var $pgn = $('#pgn');
-  var myRoom = null;
-  const client = new Colyseus.Client('ws://localhost:3002');
+function gamePage(color, roomId, isSpectator) {
+  let myColor = color;
+  let board = null;
+  let game = new Chess();
+  let $status = $('#status');
+  let $fen = $('#fen');
+  let $pgn = $('#pgn');
+  let myRoom = null;
+
+  function setUpBoard() {
+    let config = {
+      draggable: true,
+      position: 'start',
+      onDragStart: onDragStart,
+      onDrop: onDrop,
+      onSnapEnd: onSnapEnd,
+      orientation: (myColor === 'w' ? "white" : "black")
+    }
+    board = Chessboard('myBoard', config)
+  }
+
+  const client = new Colyseus.Client('ws://localhost:3000');
   if (roomId) {
-    client.joinById(roomId).then(room => {
-      console.log('joined a room');
-      room.send('whatIsMyColor');
-      room.onMessage('yourColor', (color) => {
-        myColor = color;
-      });
+    client.joinById(roomId, {isSpectator}).then(room => {
+      if (!isSpectator) {
+        room.send('whatIsMyColor');
+        room.onMessage('yourColor', (color) => {
+          myColor = color;
+          setUpBoard();
+        });
+      }
       room.onStateChange((state) => {
-        console.log(state);
         game.load(state.fen);
         board.position(state.fen);
       });
@@ -23,10 +37,8 @@ function createGame(color, roomId) {
     });
   } else {
     client.create("chessGame", {color}).then(room => {
-      console.log('created and joined a room');
-      console.log(`room id is ${room.id}`);
+      console.log(room.id);
       room.onStateChange((state) => {
-        console.log(state);
         game.load(state.fen);
         board.position(state.fen);
       });
@@ -37,6 +49,11 @@ function createGame(color, roomId) {
   function onDragStart(source, piece, position, orientation) {
     // do not pick up pieces if the game is over
     if (game.game_over()) {
+      return false;
+    }
+
+    // spectators can't move pieces
+    if (isSpectator) {
       return false;
     }
 
@@ -108,13 +125,5 @@ function createGame(color, roomId) {
     $pgn.html(game.pgn())
   }
 
-  var config = {
-    draggable: true,
-    position: 'start',
-    onDragStart: onDragStart,
-    onDrop: onDrop,
-    onSnapEnd: onSnapEnd,
-    orientation: (myColor === 'w' ? "white" : "black")
-  }
-  board = Chessboard('myBoard', config)
+  setUpBoard();
 }

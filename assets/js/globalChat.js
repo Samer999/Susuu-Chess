@@ -1,5 +1,5 @@
 function connectToChat(clientName) {
-  const client = new Colyseus.Client('ws://localhost:3002');
+  const client = new Colyseus.Client('ws://localhost:3000');
   client.joinOrCreate("chat", {name: clientName}).then(room => {
     console.log("joined");
     room.onStateChange.once(function (state) {
