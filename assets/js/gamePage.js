@@ -26,7 +26,10 @@ function gamePage(color, roomId, isSpectator) {
     board = Chessboard('myBoard', config)
   }
 
-  const client = new Colyseus.Client('ws://localhost:3000');
+  const host = window.document.location.host.replace(/:.*/, '');
+  const client = new Colyseus.Client(
+      location.protocol.replace("http", "ws") + "//" + host + (location.port
+      ? ':' + location.port : ''));
   if (roomId) {
     client.joinById(roomId, {isSpectator}).then(room => {
       if (!isSpectator) {
