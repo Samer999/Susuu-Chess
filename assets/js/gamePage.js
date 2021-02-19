@@ -33,6 +33,7 @@ function gamePage(color, roomId, isSpectator) {
         room.send('whatIsMyColor');
         room.onMessage('yourColor', (color) => {
           myColor = color;
+          setRole(myColor);
           setUpBoard();
         });
       }
