@@ -35,7 +35,7 @@ app.set('view engine', 'ejs');
 
 // start listing if database connected
 mongooseConnect(mongoose).then(() => {
-  gameServer.listen(process.env.SERVER_PORT);
+  gameServer.listen(process.env.PORT);
 }).catch((err) => {
   console.log(err);
 });
